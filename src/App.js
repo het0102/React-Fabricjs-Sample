@@ -1,29 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { fabric } from "fabric";
-import { FabricJSCanvas, useFabricJSEditor } from "fabricjs-react";
 import "./App.css";
 
 const App = () => {
-  const { editor, onReady } = useFabricJSEditor();
   const [canvas, setCanvas] = useState("");
 
   useEffect(() => {
     setCanvas(initCanvas());
   }, []);
 
-  const onAddCircle = () => {
-    editor.addCircle();
-  };
-
-  const onAddRectangle = () => {
-    editor.addRectangle();
-  };
-
   const initCanvas = () =>
     new fabric.Canvas("canvas", {
-      height: 500,
-      width: 500,
-      backgroundColor: "pink",
+      height: 600,
+      width: 450,
+
+      //backgroundColor:'pink'
     });
 
   const addRect = (canvi) => {
@@ -42,9 +33,6 @@ const App = () => {
       padding: 10,
       cornerStyle: "circle",
       borderDashArray: [3, 3],
-      //lockMovementX : true,
-      //lockMovementY : true,
-      //lockRotation: true
     });
     canvi.add(rect);
     canvi.renderAll();
@@ -99,38 +87,306 @@ const App = () => {
     canvi.add(heart);
   };
 
-  const text = (canvi) => {
-    const text = new fabric.Text("Honey,\nI'm here", {
-      fontSize: 150,
-      left: 0,
-      top: 0,
-      lineHeight: 1,
-      originX: "left",
-      fontFamily: "Helvetica",
-      fontWeight: "bold",
-      statefullCache: true,
-      scaleX: 0.4,
-      scaleY: 0.4,
+  const textBoxSample = (canvas) => {
+    var textBoxSample = new fabric.Textbox("Write text here 😀", {
+      width: 300,
+      height: 150,
+      left: 50,
+      top: 150,
+      fontSize: "25",
     });
-    canvi.add(text);
+    canvas.add(textBoxSample);
+  };
+
+  function Arial() {
+    var selection = canvas.getActiveObject(textBoxSample);
+    selection.set({
+      fontFamily: "Arial, sans-serif",
+    });
+    canvas.add(selection);
+  }
+
+  function Helvetica() {
+    var selection = canvas.getActiveObject(textBoxSample);
+    selection.set({
+      fontFamily: "Helvetica, sans-serif",
+    });
+    canvas.add(selection);
+  }
+
+  function Monospace() {
+    var selection = canvas.getActiveObject(textBoxSample);
+    selection.set({
+      fontFamily: "Andale Mono, monospace",
+    });
+    canvas.add(selection);
+  }
+
+  function Courier() {
+    var selection = canvas.getActiveObject(textBoxSample);
+    selection.set({
+      fontFamily: "Courier, monospace",
+    });
+    canvas.add(selection);
+  }
+
+  function Cursive() {
+    var selection = canvas.getActiveObject(textBoxSample);
+    selection.set({
+      fontFamily: "Comic Sans MS, Comic Sans, cursive",
+    });
+    canvas.add(selection);
+  }
+
+  function bold() {
+    var selection = canvas.getActiveObject(textBoxSample);
+    selection.set({
+      fontWeight: "bold",
+    });
+    canvas.add(selection);
+  }
+
+  function underline() {
+    var selection = canvas.getActiveObject(textBoxSample);
+    selection.set({
+      underline: "true",
+    });
+    canvas.add(selection);
+  }
+
+  function italic() {
+    var selection = canvas.getActiveObject(textBoxSample);
+    selection.set({
+      fontWeight: "italic",
+    });
+    canvas.add(selection);
+  }
+
+  function center() {
+    var selection = canvas.getActiveObject(textBoxSample);
+    selection.set({
+      textAlign: "center",
+    });
+    canvas.add(selection);
+  }
+
+  function right() {
+    var selection = canvas.getActiveObject(textBoxSample);
+    selection.set({
+      textAlign: "right",
+    });
+    canvas.add(selection);
+  }
+
+  function left() {
+    var selection = canvas.getActiveObject(textBoxSample);
+    selection.set({
+      textAlign: "left",
+    });
+    canvas.add(selection);
+  }
+
+  var circle = new fabric.Circle({
+    radius: 100,
+    fill: "#eef",
+    scaleY: 0.5,
+    originX: "center",
+    originY: "center",
+  });
+
+  var textTitle = new fabric.Text("hello world", {
+    fontSize: 30,
+    originX: "center",
+    originY: "center",
+  });
+
+  const group = (canvi) => {
+    var group = new fabric.Group([circle, textTitle], {
+      left: 150,
+      top: 100,
+      angle: -10,
+    });
+
+    canvi.add(group);
+  };
+
+  const setImage = (canvi) => {
+    fabric.Image.fromURL("./tortoise-on-white-background.jpg", function (img) {
+      img.filters.push(
+        new fabric.Image.filters.RemoveColor({ threshold: 0.1 })
+      );
+      img.applyFilters();
+      canvi.add(img);
+      img.scaleToHeight(100);
+      img.scaleToWidth(100);
+    });
+  };
+
+  const arrow = (canvi) => {
+    const arrow = new fabric.Path(
+      "M121.32,0L44.58,0C36.67,0,29.5,3.22,24.31,8.41\
+    c-5.19,5.19-8.41,12.37-8.41,20.28c0,15.82,12.87,28.69,28.69,28.69c0,0,4.4,\
+    0,7.48,0C36.66,72.78,8.4,101.04,8.4,101.04C2.98,106.45,0,113.66,0,121.32\
+    c0,7.66,2.98,14.87,8.4,20.29l0,0c5.42,5.42,12.62,8.4,20.28,8.4c7.66,0,14.87\
+    -2.98,20.29-8.4c0,0,28.26-28.25,43.66-43.66c0,3.08,0,7.48,0,7.48c0,15.82,\
+    12.87,28.69,28.69,28.69c7.66,0,14.87-2.99,20.29-8.4c5.42-5.42,8.4-12.62,8.4\
+    -20.28l0-76.74c0-7.66-2.98-14.87-8.4-20.29C136.19,2.98,128.98,0,121.32,0z"
+    );
+    arrow.set({
+      left: 100,
+      top: 200,
+      fill: "blue",
+    });
+    canvi.add(arrow);
+  };
+
+  function yellow() {
+    var selection = canvas.getActiveObject(arrow);
+    selection.set({
+      fill: "yellow",
+    });
+    canvas.add(selection);
+  }
+
+  function red() {
+    var selection = canvas.getActiveObject(arrow);
+    selection.set({
+      fill: "red",
+    });
+    canvas.add(selection);
+  }
+
+  function green() {
+    var selection = canvas.getActiveObject(arrow);
+    selection.set({
+      fill: "green",
+    });
+    canvas.add(selection);
+  }
+
+  function gray() {
+    var selection = canvas.getActiveObject(arrow);
+    selection.set({
+      fill: "gray",
+    });
+    canvas.add(selection);
+  }
+
+  const clear = () => {
+    setCanvas(initCanvas([]));
+  };
+
+  const clipPath = (canvas) => {
+    var clipPath = new fabric.Circle({
+      radius: 100,
+      top: 10,
+      left: 10,
+      originX: "center",
+      originY: "center",
+    });
+    fabric.Image.fromURL("./ICON-01-01.svg", function (oImg) {
+      oImg.clipPath = clipPath;
+      canvas.add(oImg);
+      oImg.scaleToHeight(500);
+      oImg.scaleToWidth(500);
+    });
+    canvas.renderAll();
   };
 
   return (
     <div className="App">
-      <h1>Fabric.js Example</h1>
-      <button onClick={() => addRect(canvas)}>Rectangle</button>
-      <button onClick={() => addCircle(canvas)}>Circle</button>
-      <button onClick={() => addTriangle(canvas)}>Triangle</button>
-      <button onClick={() => heart(canvas)}>Heart</button>
-      <button onClick={() => text(canvas)}>Text</button>
-      <div className="canvas title">
-        <canvas id="canvas" />
+      <h1 className="my-4">Fabric.js Example</h1>
+      <div className="d-flex justify-content-center align-items-center">
+        <select
+          class="form-select form-select-sm"
+          aria-label="Default select example"
+        >
+          <option selected>Select Shapes</option>
+          <option onClick={() => addRect(canvas)}>Rectangle</option>
+          <option onClick={() => addCircle(canvas)}>Circle</option>
+          <option onClick={() => addTriangle(canvas)}>Triangle</option>
+          <option onClick={() => heart(canvas)}>Heart</option>
+          <option onClick={() => group(canvas)}>Group Shape</option>
+        </select>
+        &nbsp;
+        <select
+          class="form-select form-select-sm"
+          aria-label="Default select example"
+        >
+          <option selected>Select Images</option>
+          <option onClick={() => setImage(canvas)}>Image</option>
+          <option onClick={() => arrow(canvas)}>Add SVG</option>
+          <option onClick={() => clipPath(canvas)}>ClipPath Image</option>
+        </select>
+        &nbsp;
+        <button
+          className="btn btn-secondary btn-sm"
+          onClick={() => textBoxSample(canvas)}
+        >
+          Text
+        </button>
+        &nbsp;
+        <select
+          class="form-select form-select-sm"
+          aria-label="Default select example"
+        >
+          <option selected>Select Font-weight</option>
+          <option onClick={() => bold(canvas)}>Bold</option>
+          <option onClick={() => underline(canvas)}>Underline</option>
+          <option onClick={() => italic(canvas)}>Italic</option>
+        </select>
+        &nbsp;
+        <select
+          class="form-select form-select-sm"
+          aria-label="Default select example"
+        >
+          <option selected>Select Text-Align</option>
+          <option onClick={() => center(canvas)}>Center</option>
+          <option onClick={() => left(canvas)}>Left</option>
+          <option onClick={() => right(canvas)}>Right</option>
+        </select>
+        &nbsp;
+        <select
+          class="form-select form-select-sm"
+          aria-label="Default select example"
+        >
+          <option selected>Select Font-Family</option>
+          <option onClick={() => Arial(canvas)}>Arial</option>
+          <option onClick={() => Monospace(canvas)}>Monospace</option>
+          <option onClick={() => Courier(canvas)}>Courier</option>
+          <option onClick={() => Cursive(canvas)}>Cursive</option>
+          <option onClick={() => Helvetica(canvas)}>Helvetica</option>
+        </select>
       </div>
-      <h1 className="title">Fabric.js - React Example</h1>
-      <button onClick={onAddCircle}>Circle</button>
-      <button onClick={onAddRectangle}>Rectangle</button>
-      <div className="canvas">
-        <FabricJSCanvas className="sample-canvas" onReady={onReady} />
+
+      <div className="d-flex justify-content-center align-items-center my-3">
+        <select
+          class="form-select form-select-sm"
+          aria-label=".form-select-sm example"
+        >
+          <option selected>Select Color for SVG</option>
+          <option onClick={() => yellow(canvas)}>Yellow</option>
+          <option onClick={() => red(canvas)}>Red</option>
+          <option onClick={() => green(canvas)}>Green</option>
+          <option onClick={() => gray(canvas)}>Gray</option>
+        </select>
+        &nbsp;
+        <button className="btn btn-info btn-sm" onClick={() => clear(canvas)}>
+          clear
+        </button>
+      </div>
+
+      <div id="tshirt-div">
+        <img
+          src="https://media.istockphoto.com/photos/men-cut-white-tshirt-isolated-on-white-background-picture-id1142213046?k=6&m=1142213046&s=612x612&w=0&h=h4C2cEfyYROEOK92ZqooAMFKt6FHIKKsdVC3d8_ED3s="
+          alt="image"
+          className="image"
+        />
+        <div className="drawing-area">
+          <div className="canvas canvas-container">
+            <canvas style={{ border: "2px" }} id="canvas" />
+          </div>
+        </div>
       </div>
     </div>
   );

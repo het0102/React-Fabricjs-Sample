@@ -10,12 +10,34 @@
   border: 2px dashed black;
 }
 
-.canvas{
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.image {
+  height: 800px;
+  width: 900px;
+  position: relative;
+  object-fit: unset;
 }
 
-.title{
+.drawing-area {
+  position: absolute;
+  top: 60px;
+  left: 122px;
+  z-index: 10;
+}
+
+.canvas-container {
+  width: 600px;
+  height: 600px;
+  position: relative;
+  user-select: none;
+  left: 25%;
+  top: 10%;
+}
+
+#tshirt-div {
+  position: relative;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-top: 50px;
 }
