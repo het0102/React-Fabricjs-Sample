@@ -235,7 +235,6 @@ const App = () => {
     arrow.set({
       left: 100,
       top: 200,
-      fill: "blue",
     });
     canvi.add(arrow);
   };
@@ -384,7 +383,7 @@ const App = () => {
         />
         <div className="drawing-area">
           <div className="canvas canvas-container">
-            <canvas style={{ border: "2px" }} id="canvas" />
+            <canvas id="canvas" />
           </div>
         </div>
       </div>
