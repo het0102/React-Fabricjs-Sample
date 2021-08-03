@@ -210,17 +210,56 @@ const App = () => {
     canvi.add(group);
   };
 
+  var image = "./tortoise-on-white-background.jpg";
+
   const setImage = (canvi) => {
-    fabric.Image.fromURL("./tortoise-on-white-background.jpg", function (img) {
-      img.filters.push(
-        new fabric.Image.filters.RemoveColor({ threshold: 0.1 })
-      );
-      img.applyFilters();
+    fabric.Image.fromURL(image, function (img) {
+      // img.filters.push(
+      //   new fabric.Image.filters.RemoveColor({ threshold: 0.1 })
+      // );
+      // img.applyFilters();
       canvi.add(img);
       img.scaleToHeight(100);
       img.scaleToWidth(100);
     });
   };
+
+  function removeBackground (){
+    var filter = new fabric.Image.filters.RemoveColor({
+      threshold: 3,
+    });
+    canvas.getActiveObject().filters.push(filter);
+    canvas.getActiveObject().applyFilters();
+    canvas.renderAll();
+  }
+
+  function Sepia(){
+    var filter = new fabric.Image.filters.Sepia();
+    canvas.getActiveObject().filters.push(filter);
+    canvas.getActiveObject().applyFilters();
+    canvas.renderAll();
+  }
+
+  function Grayscale(){
+    var filter = new fabric.Image.filters.Grayscale();
+    canvas.getActiveObject().filters.push(filter);
+    canvas.getActiveObject().applyFilters();
+    canvas.renderAll();
+  }
+
+  function Brownie(){
+    var filter = new fabric.Image.filters.Brownie();
+    canvas.getActiveObject().filters.push(filter);
+    canvas.getActiveObject().applyFilters();
+    canvas.renderAll();
+  }
+
+  function BlackWhite(){
+    var filter = new fabric.Image.filters.BlackWhite();
+    canvas.getActiveObject().filters.push(filter);
+    canvas.getActiveObject().applyFilters();
+    canvas.renderAll();
+  }
 
   const arrow = (canvi) => {
     const arrow = new fabric.Path(
@@ -370,7 +409,19 @@ const App = () => {
           <option onClick={() => gray(canvas)}>Gray</option>
         </select>
         &nbsp;
-        <button className="btn btn-info btn-sm" onClick={() => clear(canvas)}>
+        <select
+          class="form-select form-select-sm"
+          aria-label=".form-select-sm example"
+        >
+          <option selected>Select Filters for Image</option>
+          <option onClick={() => removeBackground(canvas)}>Remove Background</option>
+          <option onClick={() => Sepia(canvas)}>Sepia</option>
+          <option onClick={() => Grayscale(canvas)}>Grayscale</option>
+          <option onClick={() => Brownie(canvas)}>Brownie</option>
+          <option onClick={() => BlackWhite(canvas)}>BlackWhite</option>
+        </select>
+        &nbsp;
+        <button className="btn btn-info btn-sm text-white" onClick={() => clear(canvas)}>
           clear
         </button>
       </div>
