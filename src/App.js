@@ -311,7 +311,7 @@ const App = () => {
   }
 
   const clear = () => {
-    setCanvas(initCanvas([]));
+    canvas.clear();
   };
 
   const clipPath = (canvas) => {
