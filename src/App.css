@@ -11,8 +11,8 @@
 }
 
 .image {
-  height: 800px;
-  width: 900px;
+  height: 750px;
+  width: 850px;
   position: relative;
   object-fit: unset;
 }
@@ -20,7 +20,7 @@
 .drawing-area {
   position: absolute;
   top: 60px;
-  left: 122px;
+  left: 150px;
   z-index: 10;
 }
 

@@ -11,10 +11,8 @@ const App = () => {
 
   const initCanvas = () =>
     new fabric.Canvas("canvas", {
-      height: 600,
-      width: 450,
-
-      //backgroundColor:'pink'
+      height: 550,
+      width: 400,
     });
 
   const addRect = (canvi) => {
@@ -91,9 +89,7 @@ const App = () => {
     var textBoxSample = new fabric.Textbox("Write text here 😀", {
       width: 300,
       height: 150,
-      left: 50,
-      top: 150,
-      fontSize: "25",
+      fontSize: "35",
     });
     canvas.add(textBoxSample);
   };
@@ -194,7 +190,7 @@ const App = () => {
     originY: "center",
   });
 
-  var textTitle = new fabric.Text("hello world", {
+  var textTitle = new fabric.Textbox("hello world", {
     fontSize: 30,
     originX: "center",
     originY: "center",
@@ -218,13 +214,43 @@ const App = () => {
       //   new fabric.Image.filters.RemoveColor({ threshold: 0.1 })
       // );
       // img.applyFilters();
-      canvi.add(img);
-      img.scaleToHeight(100);
-      img.scaleToWidth(100);
+      img.set({
+        scaleX: 0.1,
+        scaleY: 0.1,
+        originX: 'center',
+        originY: 'center',
+        left: 100,
+        top: 100,
+        perPixelTargetFind: true,
+      })
+      canvi.add(img)
     });
   };
 
-  function removeBackground (){
+  function flipX() {
+    var selection = canvas.getActiveObject(setImage);
+    selection.set({
+      flipX: true,
+    });
+    canvas.add(selection);
+  }
+
+  function flipY() {
+    var selection = canvas.getActiveObject(setImage);
+    selection.set({
+      flipY: true,
+    });
+    canvas.add(selection);
+  }
+
+  function Sepia() {
+    var filter = new fabric.Image.filters.Sepia();
+    canvas.getActiveObject().filters.push(filter);
+    canvas.getActiveObject().applyFilters();
+    canvas.renderAll();
+  }
+
+  function removeBackground() {
     var filter = new fabric.Image.filters.RemoveColor({
       threshold: 3,
     });
@@ -233,28 +259,28 @@ const App = () => {
     canvas.renderAll();
   }
 
-  function Sepia(){
+  function Sepia() {
     var filter = new fabric.Image.filters.Sepia();
     canvas.getActiveObject().filters.push(filter);
     canvas.getActiveObject().applyFilters();
     canvas.renderAll();
   }
 
-  function Grayscale(){
+  function Grayscale() {
     var filter = new fabric.Image.filters.Grayscale();
     canvas.getActiveObject().filters.push(filter);
     canvas.getActiveObject().applyFilters();
     canvas.renderAll();
   }
 
-  function Brownie(){
+  function Brownie() {
     var filter = new fabric.Image.filters.Brownie();
     canvas.getActiveObject().filters.push(filter);
     canvas.getActiveObject().applyFilters();
     canvas.renderAll();
   }
 
-  function BlackWhite(){
+  function BlackWhite() {
     var filter = new fabric.Image.filters.BlackWhite();
     canvas.getActiveObject().filters.push(filter);
     canvas.getActiveObject().applyFilters();
@@ -310,10 +336,6 @@ const App = () => {
     canvas.add(selection);
   }
 
-  const clear = () => {
-    canvas.clear();
-  };
-
   const clipPath = (canvas) => {
     var clipPath = new fabric.Circle({
       radius: 100,
@@ -329,6 +351,10 @@ const App = () => {
       oImg.scaleToWidth(500);
     });
     canvas.renderAll();
+  };
+
+  const clear = () => {
+    canvas.clear();
   };
 
   return (
@@ -414,14 +440,21 @@ const App = () => {
           aria-label=".form-select-sm example"
         >
           <option selected>Select Filters for Image</option>
-          <option onClick={() => removeBackground(canvas)}>Remove Background</option>
+          <option onClick={() => removeBackground(canvas)}>
+            Remove Background
+          </option>
           <option onClick={() => Sepia(canvas)}>Sepia</option>
           <option onClick={() => Grayscale(canvas)}>Grayscale</option>
           <option onClick={() => Brownie(canvas)}>Brownie</option>
           <option onClick={() => BlackWhite(canvas)}>BlackWhite</option>
+          <option onClick={() => flipX(canvas)}>flipX</option>
+          <option onClick={() => flipY(canvas)}>flipY</option>
         </select>
         &nbsp;
-        <button className="btn btn-info btn-sm text-white" onClick={() => clear(canvas)}>
+        <button
+          className="btn btn-info btn-sm text-white"
+          onClick={() => clear(canvas)}
+        >
           clear
         </button>
       </div>
