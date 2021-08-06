@@ -5,6 +5,9 @@ import "./App.css";
 const App = () => {
   const [canvas, setCanvas] = useState("");
 
+  var image = "./tortoise-on-white-background.jpg";
+  var image1 = "./2.jpg";
+
   useEffect(() => {
     setCanvas(initCanvas());
   }, []);
@@ -14,6 +17,109 @@ const App = () => {
       height: 550,
       width: 400,
     });
+
+  const selectAllObjects = () => {
+    const elem = document.querySelector(".SelectAllObjects");
+    elem.addEventListener("click", () => {
+      canvas.discardActiveObject();
+      let selectedObjects = new fabric.ActiveSelection(canvas.getObjects(), {
+        canvas: canvas,
+      });
+      canvas.setActiveObject(selectedObjects);
+      canvas.requestRenderAll();
+    });
+  };
+
+  const discardAllObjects = () => {
+    const elem = document.querySelector("#DiscardAllObjects");
+    elem.addEventListener("click", function () {
+      canvas.discardActiveObject();
+      canvas.requestRenderAll();
+    });
+  };
+
+  const selectAllCircles = () => {
+    const elem = document.querySelector("#SelectAllCircleObjects");
+    elem.addEventListener("click", function () {
+      canvas.discardActiveObject();
+      let selectedObjects = new fabric.ActiveSelection(
+        canvas.getObjects().filter((obj) => obj.type === "circle"),
+        {
+          canvas: canvas,
+        }
+      );
+
+      canvas.setActiveObject(selectedObjects);
+      canvas.requestRenderAll();
+    });
+  };
+
+  const groupAllSelect = () => {
+    const elem = document.querySelector("#GroupSelectedObjects");
+    elem.addEventListener("click", function () {
+      if (!canvas.getActiveObject()) {
+        return;
+      }
+      if (!canvas.getActiveObject().type === "activeSelection") {
+        return;
+      }
+      canvas.getActiveObject().toGroup();
+      canvas.requestRenderAll();
+    });
+  };
+
+  const unGroupAllSelect = () => {
+    const elem = document.querySelector("#UnGroupObjects");
+    elem.addEventListener("click", function () {
+      if (!canvas.getActiveObject()) {
+        return;
+      }
+      if (!canvas.getActiveObject().type === "group") {
+        return;
+      }
+      canvas.getActiveObject().toActiveSelection();
+      canvas.requestRenderAll();
+    });
+  };
+
+  const backGroundImage = () => {
+    fabric.Image.fromURL(image1, function (img) {
+      canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
+        height: 550,
+        width: 400,
+      });
+    });
+  };
+
+  function redColor() {
+    var selection = canvas.getActiveObject(canvas);
+    canvas.setBackgroundColor("red", canvas.renderAll.bind(canvas));
+  }
+
+  function blueColor() {
+    var selection = canvas.getActiveObject(canvas);
+    canvas.setBackgroundColor("blue", canvas.renderAll.bind(canvas));
+  }
+
+  function blackColor() {
+    var selection = canvas.getActiveObject(canvas);
+    canvas.setBackgroundColor("black", canvas.renderAll.bind(canvas));
+  }
+
+  const overlayImage = () => {
+    canvas.setOverlayImage(image1, canvas.renderAll.bind(canvas), {
+      top: 100,
+      opacity: 0.3,
+    });
+  };
+
+  const overlayColor = () => {
+    canvas.setOverlayColor("blue", canvas.renderAll.bind(canvas), {
+      height: 100,
+      width: 100,
+      opacity: 0.5
+    });
+  };
 
   const addRect = (canvi) => {
     const rect = new fabric.Rect({
@@ -206,8 +312,6 @@ const App = () => {
     canvi.add(group);
   };
 
-  var image = "./tortoise-on-white-background.jpg";
-
   const setImage = (canvi) => {
     fabric.Image.fromURL(image, function (img) {
       // img.filters.push(
@@ -217,13 +321,13 @@ const App = () => {
       img.set({
         scaleX: 0.1,
         scaleY: 0.1,
-        originX: 'center',
-        originY: 'center',
+        originX: "center",
+        originY: "center",
         left: 100,
         top: 100,
         perPixelTargetFind: true,
-      })
-      canvi.add(img)
+      });
+      canvi.add(img);
     });
   };
 
@@ -452,7 +556,79 @@ const App = () => {
         </select>
         &nbsp;
         <button
+          className="btn btn-info btn-sm text-white SelectAllObjects"
+          onClick={() => selectAllObjects(canvas)}
+        >
+          Select_All_Objects
+        </button>
+        &nbsp;
+        <button
           className="btn btn-info btn-sm text-white"
+          onClick={() => discardAllObjects(canvas)}
+          id="DiscardAllObjects"
+        >
+          Discard_All_Objects
+        </button>
+        &nbsp;
+        <button
+          className="btn btn-info btn-sm text-white"
+          id="SelectAllCircleObjects"
+          onClick={() => selectAllCircles(canvas)}
+        >
+          Select_All_Circle
+        </button>
+      </div>
+
+      <div className="d-flex justify-content-center align-items-center my-3">
+        <button
+          onClick={() => groupAllSelect(canvas)}
+          className="btn btn-info btn-sm text-white"
+          id="GroupSelectedObjects"
+        >
+          Group_Selected_Objects
+        </button>
+        &nbsp;
+        <button
+          onClick={() => unGroupAllSelect(canvas)}
+          className="btn btn-info btn-sm text-white"
+          id="UnGroupObjects"
+        >
+          UnGroup_Objects
+        </button>
+        &nbsp;
+        <button
+          onClick={() => backGroundImage(canvas)}
+          className="btn btn-info btn-sm text-white"
+        >
+          Set_Background_Image
+        </button>
+        &nbsp;
+        <select
+          class="form-select form-select-sm"
+          aria-label="Default select example"
+        >
+          <option selected>Select Background-Color for canvas</option>
+          <option onClick={() => redColor(canvas)}>red</option>
+          <option onClick={() => blueColor(canvas)}>blue</option>
+          <option onClick={() => blackColor(canvas)}>black</option>
+        </select>
+        &nbsp;
+        <button
+          onClick={() => overlayImage(canvas)}
+          className="btn btn-info btn-sm text-white"
+        >
+          Set_Overlay_Image
+        </button>
+        &nbsp;
+        <button
+          onClick={() => overlayColor(canvas)}
+          className="btn btn-info btn-sm text-white"
+        >
+          Set_Overlay_Color
+        </button>
+        &nbsp;
+        <button
+          className="btn btn-danger btn-sm"
           onClick={() => clear(canvas)}
         >
           clear
