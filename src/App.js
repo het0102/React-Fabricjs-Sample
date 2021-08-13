@@ -17,6 +17,17 @@ const App = () => {
       height: 550,
       width: 400,
     });
+  
+  const download = () => {
+    var canvass = document.getElementById("canvas");
+    image = canvass
+      .toDataURL("image/png", 1.0)
+      .replace("image/png", "image/octet-stream");
+    var link = document.createElement("a");
+    link.download = "my-image.png";
+    link.href = image;
+    link.click();
+  };
 
   const selectAllObjects = () => {
     const elem = document.querySelector(".SelectAllObjects");
@@ -632,6 +643,13 @@ const App = () => {
           onClick={() => clear(canvas)}
         >
           clear
+        </button>
+
+        <button
+          className="btn btn-outline-warning btn-sm"
+          onClick={() => download(canvas)}
+        >
+          Download
         </button>
       </div>
 
