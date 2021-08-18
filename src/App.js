@@ -17,7 +17,7 @@ const App = () => {
       height: 550,
       width: 400,
     });
-  
+
   const download = () => {
     var canvass = document.getElementById("canvas");
     image = canvass
@@ -28,7 +28,6 @@ const App = () => {
     link.href = image;
     link.click();
   };
-
   const selectAllObjects = () => {
     const elem = document.querySelector(".SelectAllObjects");
     elem.addEventListener("click", () => {
@@ -103,17 +102,17 @@ const App = () => {
   };
 
   function redColor() {
-    var selection = canvas.getActiveObject(canvas);
+    canvas.getActiveObject(canvas);
     canvas.setBackgroundColor("red", canvas.renderAll.bind(canvas));
   }
 
   function blueColor() {
-    var selection = canvas.getActiveObject(canvas);
+    canvas.getActiveObject(canvas);
     canvas.setBackgroundColor("blue", canvas.renderAll.bind(canvas));
   }
 
   function blackColor() {
-    var selection = canvas.getActiveObject(canvas);
+    canvas.getActiveObject(canvas);
     canvas.setBackgroundColor("black", canvas.renderAll.bind(canvas));
   }
 
@@ -128,7 +127,7 @@ const App = () => {
     canvas.setOverlayColor("blue", canvas.renderAll.bind(canvas), {
       height: 100,
       width: 100,
-      opacity: 0.5
+      opacity: 0.5,
     });
   };
 
@@ -299,29 +298,29 @@ const App = () => {
     canvas.add(selection);
   }
 
-  var circle = new fabric.Circle({
-    radius: 100,
-    fill: "#eef",
-    scaleY: 0.5,
-    originX: "center",
-    originY: "center",
-  });
+  // var circle = new fabric.Circle({
+  //   radius: 100,
+  //   fill: "#eef",
+  //   scaleY: 0.5,
+  //   originX: "center",
+  //   originY: "center",
+  // });
 
-  var textTitle = new fabric.Textbox("hello world", {
-    fontSize: 30,
-    originX: "center",
-    originY: "center",
-  });
+  // var textTitle = new fabric.Textbox("hello world", {
+  //   fontSize: 30,
+  //   originX: "center",
+  //   originY: "center",
+  // });
 
-  const group = (canvi) => {
-    var group = new fabric.Group([circle, textTitle], {
-      left: 150,
-      top: 100,
-      angle: -10,
-    });
+  // const group = (canvi) => {
+  //   var group = new fabric.Group([circle, textTitle], {
+  //     left: 150,
+  //     top: 100,
+  //     angle: -10,
+  //   });
 
-    canvi.add(group);
-  };
+  //   canvi.add(group);
+  // };
 
   const setImage = (canvi) => {
     fabric.Image.fromURL(image, function (img) {
@@ -485,11 +484,10 @@ const App = () => {
           <option onClick={() => addCircle(canvas)}>Circle</option>
           <option onClick={() => addTriangle(canvas)}>Triangle</option>
           <option onClick={() => heart(canvas)}>Heart</option>
-          <option onClick={() => group(canvas)}>Group Shape</option>
+          {/*<option onClick={() => group(canvas)}>Group Shape</option>*/}
         </select>
-        &nbsp;
         <select
-          class="form-select form-select-sm"
+          class="form-select form-select-sm mx-1"
           aria-label="Default select example"
         >
           <option selected>Select Images</option>
@@ -497,16 +495,14 @@ const App = () => {
           <option onClick={() => arrow(canvas)}>Add SVG</option>
           <option onClick={() => clipPath(canvas)}>ClipPath Image</option>
         </select>
-        &nbsp;
         <button
           className="btn btn-secondary btn-sm"
           onClick={() => textBoxSample(canvas)}
         >
           Text
         </button>
-        &nbsp;
         <select
-          class="form-select form-select-sm"
+          class="form-select form-select-sm mx-1"
           aria-label="Default select example"
         >
           <option selected>Select Font-weight</option>
@@ -514,7 +510,6 @@ const App = () => {
           <option onClick={() => underline(canvas)}>Underline</option>
           <option onClick={() => italic(canvas)}>Italic</option>
         </select>
-        &nbsp;
         <select
           class="form-select form-select-sm"
           aria-label="Default select example"
@@ -524,9 +519,8 @@ const App = () => {
           <option onClick={() => left(canvas)}>Left</option>
           <option onClick={() => right(canvas)}>Right</option>
         </select>
-        &nbsp;
         <select
-          class="form-select form-select-sm"
+          class="form-select form-select-sm mx-1"
           aria-label="Default select example"
         >
           <option selected>Select Font-Family</option>
@@ -549,9 +543,8 @@ const App = () => {
           <option onClick={() => green(canvas)}>Green</option>
           <option onClick={() => gray(canvas)}>Gray</option>
         </select>
-        &nbsp;
         <select
-          class="form-select form-select-sm"
+          class="form-select form-select-sm mx-1"
           aria-label=".form-select-sm example"
         >
           <option selected>Select Filters for Image</option>
@@ -565,55 +558,49 @@ const App = () => {
           <option onClick={() => flipX(canvas)}>flipX</option>
           <option onClick={() => flipY(canvas)}>flipY</option>
         </select>
-        &nbsp;
         <button
           className="btn btn-info btn-sm text-white SelectAllObjects"
           onClick={() => selectAllObjects(canvas)}
         >
-          Select_All_Objects
+          SelectAllObjects
         </button>
-        &nbsp;
         <button
-          className="btn btn-info btn-sm text-white"
+          className="btn btn-info btn-sm text-white mx-1"
           onClick={() => discardAllObjects(canvas)}
           id="DiscardAllObjects"
         >
-          Discard_All_Objects
+          DiscardAllObjects
         </button>
-        &nbsp;
         <button
           className="btn btn-info btn-sm text-white"
           id="SelectAllCircleObjects"
           onClick={() => selectAllCircles(canvas)}
         >
-          Select_All_Circle
+          SelectAllCircle
         </button>
       </div>
 
       <div className="d-flex justify-content-center align-items-center my-3">
         <button
           onClick={() => groupAllSelect(canvas)}
-          className="btn btn-info btn-sm text-white"
+          className="btn btn-info btn-sm text-white mx-1"
           id="GroupSelectedObjects"
         >
-          Group_Selected_Objects
+          GroupSelectedObjects
         </button>
-        &nbsp;
         <button
           onClick={() => unGroupAllSelect(canvas)}
           className="btn btn-info btn-sm text-white"
           id="UnGroupObjects"
         >
-          UnGroup_Objects
+          UnGroupObjects
         </button>
-        &nbsp;
         <button
           onClick={() => backGroundImage(canvas)}
-          className="btn btn-info btn-sm text-white"
+          className="btn btn-info btn-sm text-white mx-1"
         >
-          Set_Background_Image
+          SetBackgroundImage
         </button>
-        &nbsp;
         <select
           class="form-select form-select-sm"
           aria-label="Default select example"
@@ -623,28 +610,24 @@ const App = () => {
           <option onClick={() => blueColor(canvas)}>blue</option>
           <option onClick={() => blackColor(canvas)}>black</option>
         </select>
-        &nbsp;
         <button
           onClick={() => overlayImage(canvas)}
-          className="btn btn-info btn-sm text-white"
+          className="btn btn-info btn-sm text-white mx-1"
         >
-          Set_Overlay_Image
+          SetOverlayImage
         </button>
-        &nbsp;
         <button
           onClick={() => overlayColor(canvas)}
           className="btn btn-info btn-sm text-white"
         >
-          Set_Overlay_Color
+          SetOverlayColor
         </button>
-        &nbsp;
         <button
-          className="btn btn-danger btn-sm"
+          className="btn btn-danger btn-sm mx-1"
           onClick={() => clear(canvas)}
         >
           clear
         </button>
-
         <button
           className="btn btn-outline-warning btn-sm"
           onClick={() => download(canvas)}
@@ -653,14 +636,9 @@ const App = () => {
         </button>
       </div>
 
-      <div id="tshirt-div">
-        <img
-          src="https://media.istockphoto.com/photos/men-cut-white-tshirt-isolated-on-white-background-picture-id1142213046?k=6&m=1142213046&s=612x612&w=0&h=h4C2cEfyYROEOK92ZqooAMFKt6FHIKKsdVC3d8_ED3s="
-          alt="image"
-          className="image"
-        />
-        <div className="drawing-area">
-          <div className="canvas canvas-container">
+      <div className="row d-flex justify-content-center">
+        <div className="col-md-12 wallpaper">
+          <div className="canvas">
             <canvas id="canvas" />
           </div>
         </div>

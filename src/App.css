@@ -3,41 +3,31 @@
   font-family: sans-serif;
 }
 
-.sample-canvas {
-  margin-top: 40px;
-  height: 500px;
-  width: 500px;
-  border: 2px dashed black;
+.btn-outline-warning:hover{
+  color: #fff !important;
 }
 
-.image {
-  height: 750px;
-  width: 850px;
-  position: relative;
-  object-fit: unset;
+canvas{
+  margin-top: 6rem;
+  top: 5px;
+  left: 218px !important;
 }
 
-.drawing-area {
-  position: absolute;
-  top: 60px;
-  left: 150px;
-  z-index: 10;
+.col-md-12{
+  height: 100vh !important;
 }
 
-.canvas-container {
-  width: 600px;
-  height: 600px;
-  position: relative;
-  user-select: none;
-  left: 25%;
-  top: 10%;
+.wallpaper{
+  max-height: 700px;
+  height: auto;
+  max-width: 850px;
+  width: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: url("https://media.istockphoto.com/photos/men-cut-white-tshirt-isolated-on-white-background-picture-id1142213046?k=6&m=1142213046&s=612x612&w=0&h=h4C2cEfyYROEOK92ZqooAMFKt6FHIKKsdVC3d8_ED3s=");
+
 }
 
-#tshirt-div {
-  position: relative;
-  background-color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 50px;
+select{
+  max-width: 90% !important;
 }
