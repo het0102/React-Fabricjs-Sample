@@ -1,8 +1,9 @@
+import './App.css';
 import React, { useState, useEffect } from "react";
 import { fabric } from "fabric";
-import "./App.css";
 
-const App = () => {
+function App() {
+
   const [canvas, setCanvas] = useState("");
 
   var image = "./tortoise-on-white-background.jpg";
@@ -15,19 +16,65 @@ const App = () => {
   const initCanvas = () =>
     new fabric.Canvas("canvas", {
       height: 550,
-      width: 400,
+      width: 300,
     });
 
   const download = () => {
-    var canvass = document.getElementById("canvas");
-    image = canvass
-      .toDataURL("image/png", 1.0)
-      .replace("image/png", "image/octet-stream");
-    var link = document.createElement("a");
+    var canvas = document.getElementById("canvas");
+    image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+    var link = document.createElement('a');
     link.download = "my-image.png";
     link.href = image;
     link.click();
   };
+
+  const downloadJson = () => {
+    var canvasContents = canvas.toDataURL();
+    var data = { image: canvasContents, date: Date.now() };
+    var string = JSON.stringify(data);
+
+    var file = new Blob([string], {
+      type: 'application/json'
+    });
+    
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(file);
+    a.download = 'image.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
+  function DownloadSvg(){
+    var filedata = canvas.toSVG();
+    var locfile = new Blob([filedata], {type: "image/svg+xml;charset=utf-8"});
+    var locfilesrc = URL.createObjectURL(locfile);
+    var link = document.createElement("a");
+    link.download = "canvas.svg";
+    link.href = locfilesrc;
+    link.click();   
+    return link;
+}
+
+function loadFile(){
+  document.getElementById('adding').onchange = function handleImage(e) {
+    var reader = new FileReader();
+    reader.onload = function(event) {
+      var imgObj = new Image();
+      imgObj.src = event.target.result;
+      imgObj.onload = function() {
+        var image = new fabric.Image(imgObj);
+        image.set({
+          left: 10,
+          top: 10,
+        }).scale(0.5);
+        canvas.add(image);
+      };
+    };
+    reader.readAsDataURL(e.target.files[0]);
+  };
+}
+
   const selectAllObjects = () => {
     const elem = document.querySelector(".SelectAllObjects");
     elem.addEventListener("click", () => {
@@ -472,179 +519,217 @@ const App = () => {
   };
 
   return (
-    <div className="App">
-      <h1 className="my-4">Fabric.js Example</h1>
-      <div className="d-flex justify-content-center align-items-center">
-        <select
-          class="form-select form-select-sm"
-          aria-label="Default select example"
-        >
-          <option selected>Select Shapes</option>
-          <option onClick={() => addRect(canvas)}>Rectangle</option>
-          <option onClick={() => addCircle(canvas)}>Circle</option>
-          <option onClick={() => addTriangle(canvas)}>Triangle</option>
-          <option onClick={() => heart(canvas)}>Heart</option>
-          {/*<option onClick={() => group(canvas)}>Group Shape</option>*/}
-        </select>
-        <select
-          class="form-select form-select-sm mx-1"
-          aria-label="Default select example"
-        >
-          <option selected>Select Images</option>
-          <option onClick={() => setImage(canvas)}>Image</option>
-          <option onClick={() => arrow(canvas)}>Add SVG</option>
-          <option onClick={() => clipPath(canvas)}>ClipPath Image</option>
-        </select>
-        <button
-          className="btn btn-secondary btn-sm"
-          onClick={() => textBoxSample(canvas)}
-        >
-          Text
-        </button>
-        <select
-          class="form-select form-select-sm mx-1"
-          aria-label="Default select example"
-        >
-          <option selected>Select Font-weight</option>
-          <option onClick={() => bold(canvas)}>Bold</option>
-          <option onClick={() => underline(canvas)}>Underline</option>
-          <option onClick={() => italic(canvas)}>Italic</option>
-        </select>
-        <select
-          class="form-select form-select-sm"
-          aria-label="Default select example"
-        >
-          <option selected>Select Text-Align</option>
-          <option onClick={() => center(canvas)}>Center</option>
-          <option onClick={() => left(canvas)}>Left</option>
-          <option onClick={() => right(canvas)}>Right</option>
-        </select>
-        <select
-          class="form-select form-select-sm mx-1"
-          aria-label="Default select example"
-        >
-          <option selected>Select Font-Family</option>
-          <option onClick={() => Arial(canvas)}>Arial</option>
-          <option onClick={() => Monospace(canvas)}>Monospace</option>
-          <option onClick={() => Courier(canvas)}>Courier</option>
-          <option onClick={() => Cursive(canvas)}>Cursive</option>
-          <option onClick={() => Helvetica(canvas)}>Helvetica</option>
-        </select>
-      </div>
+    <div className="container">
 
-      <div className="d-flex justify-content-center align-items-center my-3">
-        <select
-          class="form-select form-select-sm"
-          aria-label=".form-select-sm example"
-        >
-          <option selected>Select Color for SVG</option>
-          <option onClick={() => yellow(canvas)}>Yellow</option>
-          <option onClick={() => red(canvas)}>Red</option>
-          <option onClick={() => green(canvas)}>Green</option>
-          <option onClick={() => gray(canvas)}>Gray</option>
-        </select>
-        <select
-          class="form-select form-select-sm mx-1"
-          aria-label=".form-select-sm example"
-        >
-          <option selected>Select Filters for Image</option>
-          <option onClick={() => removeBackground(canvas)}>
-            Remove Background
-          </option>
-          <option onClick={() => Sepia(canvas)}>Sepia</option>
-          <option onClick={() => Grayscale(canvas)}>Grayscale</option>
-          <option onClick={() => Brownie(canvas)}>Brownie</option>
-          <option onClick={() => BlackWhite(canvas)}>BlackWhite</option>
-          <option onClick={() => flipX(canvas)}>flipX</option>
-          <option onClick={() => flipY(canvas)}>flipY</option>
-        </select>
-        <button
-          className="btn btn-info btn-sm text-white SelectAllObjects"
-          onClick={() => selectAllObjects(canvas)}
-        >
-          SelectAllObjects
-        </button>
-        <button
-          className="btn btn-info btn-sm text-white mx-1"
-          onClick={() => discardAllObjects(canvas)}
-          id="DiscardAllObjects"
-        >
-          DiscardAllObjects
-        </button>
-        <button
-          className="btn btn-info btn-sm text-white"
-          id="SelectAllCircleObjects"
-          onClick={() => selectAllCircles(canvas)}
-        >
-          SelectAllCircle
-        </button>
-      </div>
+      <h1 className="my-4 text-center">Fabric.js Example</h1>
+      
+      <div className="row">
 
-      <div className="d-flex justify-content-center align-items-center my-3">
-        <button
-          onClick={() => groupAllSelect(canvas)}
-          className="btn btn-info btn-sm text-white mx-1"
-          id="GroupSelectedObjects"
-        >
-          GroupSelectedObjects
-        </button>
-        <button
-          onClick={() => unGroupAllSelect(canvas)}
-          className="btn btn-info btn-sm text-white"
-          id="UnGroupObjects"
-        >
-          UnGroupObjects
-        </button>
-        <button
-          onClick={() => backGroundImage(canvas)}
-          className="btn btn-info btn-sm text-white mx-1"
-        >
-          SetBackgroundImage
-        </button>
-        <select
-          class="form-select form-select-sm"
-          aria-label="Default select example"
-        >
-          <option selected>Select Background-Color for canvas</option>
-          <option onClick={() => redColor(canvas)}>red</option>
-          <option onClick={() => blueColor(canvas)}>blue</option>
-          <option onClick={() => blackColor(canvas)}>black</option>
-        </select>
-        <button
-          onClick={() => overlayImage(canvas)}
-          className="btn btn-info btn-sm text-white mx-1"
-        >
-          SetOverlayImage
-        </button>
-        <button
-          onClick={() => overlayColor(canvas)}
-          className="btn btn-info btn-sm text-white"
-        >
-          SetOverlayColor
-        </button>
-        <button
-          className="btn btn-danger btn-sm mx-1"
-          onClick={() => clear(canvas)}
-        >
-          clear
-        </button>
-        <button
-          className="btn btn-outline-warning btn-sm"
-          onClick={() => download(canvas)}
-        >
-          Download
-        </button>
-      </div>
+        <div className="col-md-6 d-grid align-items-center justify-content-center my-3">
 
-      <div className="row d-flex justify-content-center">
-        <div className="col-md-12 wallpaper">
+          <select
+            class="form-select form-select-sm mb-2"
+            aria-label="Default select example"
+          >
+            <option selected>Select Shapes</option>
+            <option onClick={() => addRect(canvas)}>Rectangle</option>
+            <option onClick={() => addCircle(canvas)}>Circle</option>
+            <option onClick={() => addTriangle(canvas)}>Triangle</option>
+            <option onClick={() => heart(canvas)}>Heart</option>
+            {/*<option onClick={() => group(canvas)}>Group Shape</option>*/}
+          </select>
+          <select
+            class="form-select form-select-sm mb-2"
+            aria-label="Default select example"
+          >
+            <option selected>Select Images</option>
+            <option onClick={() => setImage(canvas)}>Image</option>
+            <option onClick={() => arrow(canvas)}>Add SVG</option>
+            <option onClick={() => clipPath(canvas)}>ClipPath Image</option>
+          </select>
+
+          <button
+            className="btn btn-secondary btn-sm mb-2"
+            onClick={() => textBoxSample(canvas)}
+          >
+            Text
+          </button>
+          <select
+            class="form-select form-select-sm mb-2"
+            aria-label="Default select example"
+          >
+            <option selected>Select Font-weight</option>
+            <option onClick={() => bold(canvas)}>Bold</option>
+            <option onClick={() => underline(canvas)}>Underline</option>
+            <option onClick={() => italic(canvas)}>Italic</option>
+          </select>
+          <select
+            class="form-select form-select-sm mb-2"
+            aria-label="Default select example"
+          >
+            <option selected>Select Text-Align</option>
+            <option onClick={() => center(canvas)}>Center</option>
+            <option onClick={() => left(canvas)}>Left</option>
+            <option onClick={() => right(canvas)}>Right</option>
+          </select>
+          <select
+            class="form-select form-select-sm mb-2"
+            aria-label="Default select example"
+          >
+            <option selected>Select Font-Family</option>
+            <option onClick={() => Arial(canvas)}>Arial</option>
+            <option onClick={() => Monospace(canvas)}>Monospace</option>
+            <option onClick={() => Courier(canvas)}>Courier</option>
+            <option onClick={() => Cursive(canvas)}>Cursive</option>
+            <option onClick={() => Helvetica(canvas)}>Helvetica</option>
+          </select>
+
+          <select
+            class="form-select form-select-sm mb-2"
+            aria-label=".form-select-sm example"
+          >
+            <option selected>Select Color for SVG</option>
+            <option onClick={() => yellow(canvas)}>Yellow</option>
+            <option onClick={() => red(canvas)}>Red</option>
+            <option onClick={() => green(canvas)}>Green</option>
+            <option onClick={() => gray(canvas)}>Gray</option>
+          </select>
+
+          <select
+            class="form-select form-select-sm mb-2"
+            aria-label=".form-select-sm example"
+          >
+            <option selected>Select Filters for Image</option>
+            <option onClick={() => removeBackground(canvas)}>
+              Remove Background
+            </option>
+            <option onClick={() => Sepia(canvas)}>Sepia</option>
+            <option onClick={() => Grayscale(canvas)}>Grayscale</option>
+            <option onClick={() => Brownie(canvas)}>Brownie</option>
+            <option onClick={() => BlackWhite(canvas)}>BlackWhite</option>
+            <option onClick={() => flipX(canvas)}>flipX</option>
+            <option onClick={() => flipY(canvas)}>flipY</option>
+          </select>
+
+          <button
+            className="btn btn-info btn-sm text-white SelectAllObjects mb-2"
+            onClick={() => selectAllObjects(canvas)}
+          >
+            SelectAllObjects
+          </button>
+
+          <button
+            className="btn btn-info btn-sm text-white mb-2"
+            onClick={() => discardAllObjects(canvas)}
+            id="DiscardAllObjects"
+          >
+            DiscardAllObjects
+          </button>
+
+          <button
+            className="btn btn-info btn-sm text-white mb-2"
+            id="SelectAllCircleObjects"
+            onClick={() => selectAllCircles(canvas)}
+          >
+            SelectAllCircle
+          </button>
+
+          <button
+            onClick={() => groupAllSelect(canvas)}
+            className="btn btn-info btn-sm text-white mb-2"
+            id="GroupSelectedObjects"
+          >
+            GroupSelectedObjects
+          </button>
+
+          <button
+            onClick={() => unGroupAllSelect(canvas)}
+            className="btn btn-info btn-sm text-white mb-2"
+            id="UnGroupObjects"
+          >
+            UnGroupObjects
+          </button>
+
+          <button
+            onClick={() => backGroundImage(canvas)}
+            className="btn btn-info btn-sm text-white mb-2"
+          >
+            SetBackgroundImage
+          </button>
+
+          <select
+            class="form-select form-select-sm mb-2"
+            aria-label="Default select example"
+          >
+            <option selected>Select Background-Color for canvas</option>
+            <option onClick={() => redColor(canvas)}>red</option>
+            <option onClick={() => blueColor(canvas)}>blue</option>
+            <option onClick={() => blackColor(canvas)}>black</option>
+          </select>
+
+          <button
+            onClick={() => overlayImage(canvas)}
+            className="btn btn-info btn-sm mb-2 text-white"
+          >
+            SetOverlayImage
+          </button>
+
+          <button
+            onClick={() => overlayColor(canvas)}
+            className="btn btn-info btn-sm mb-2 text-white"
+          >
+            SetOverlayColor
+          </button>
+
+          <button
+            className="btn btn-danger btn-sm mb-2"
+            onClick={() => clear(canvas)}
+          >
+            clear
+          </button>
+
+          <button
+            className="btn btn-outline-warning btn-sm mb-2"
+            onClick={() => download(canvas)}
+          >
+            Download PNG file
+          </button>
+
+          <button
+            className="btn btn-outline-warning btn-sm mb-2"
+            onClick={() => downloadJson(canvas)}
+          >
+            Download JSON file
+          </button>
+
+          <button
+            className="btn btn-outline-warning btn-sm mb-2"
+            onClick={() => DownloadSvg(canvas)}
+          >
+            Download Svg file
+          </button>
+
+          <input
+            className="mb-2"
+            id='adding'
+            type="file"
+            onClick={() => loadFile(canvas)}
+          />
+
+        </div>
+
+        <div className="col-md-6 d-flex justify-content-center my-3 wallpaper">
+
           <div className="canvas">
             <canvas id="canvas" />
           </div>
+
         </div>
+
       </div>
+
     </div>
   );
-};
+}
 
 export default App;
