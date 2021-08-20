@@ -8,3 +8,8 @@
 .btn-outline-warning:hover{
   color: #fff !important;
 }
+
+.canvas{
+  top: 70px !important; 
+  left: 30px !important;
+}

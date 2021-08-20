@@ -1,13 +1,13 @@
-import './App.css';
+import "./App.css";
 import React, { useState, useEffect } from "react";
 import { fabric } from "fabric";
 
 function App() {
-
   const [canvas, setCanvas] = useState("");
 
   var image = "./tortoise-on-white-background.jpg";
   var image1 = "./2.jpg";
+  var image2 = "./1.jpg";
 
   useEffect(() => {
     setCanvas(initCanvas());
@@ -15,14 +15,16 @@ function App() {
 
   const initCanvas = () =>
     new fabric.Canvas("canvas", {
-      height: 550,
-      width: 300,
+      height: 500,
+      width: 275,
     });
 
   const download = () => {
     var canvas = document.getElementById("canvas");
-    image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-    var link = document.createElement('a');
+    image = canvas
+      .toDataURL("image/png")
+      .replace("image/png", "image/octet-stream");
+    var link = document.createElement("a");
     link.download = "my-image.png";
     link.href = image;
     link.click();
@@ -34,46 +36,48 @@ function App() {
     var string = JSON.stringify(data);
 
     var file = new Blob([string], {
-      type: 'application/json'
+      type: "application/json",
     });
-    
-    var a = document.createElement('a');
+
+    var a = document.createElement("a");
     a.href = URL.createObjectURL(file);
-    a.download = 'image.json';
+    a.download = "image.json";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
   };
 
-  function DownloadSvg(){
+  function DownloadSvg() {
     var filedata = canvas.toSVG();
-    var locfile = new Blob([filedata], {type: "image/svg+xml;charset=utf-8"});
+    var locfile = new Blob([filedata], { type: "image/svg+xml;charset=utf-8" });
     var locfilesrc = URL.createObjectURL(locfile);
     var link = document.createElement("a");
     link.download = "canvas.svg";
     link.href = locfilesrc;
-    link.click();   
+    link.click();
     return link;
-}
+  }
 
-function loadFile(){
-  document.getElementById('adding').onchange = function handleImage(e) {
-    var reader = new FileReader();
-    reader.onload = function(event) {
-      var imgObj = new Image();
-      imgObj.src = event.target.result;
-      imgObj.onload = function() {
-        var image = new fabric.Image(imgObj);
-        image.set({
-          left: 10,
-          top: 10,
-        }).scale(0.5);
-        canvas.add(image);
+  function loadFile() {
+    document.querySelector(".adding").onchange = function handleImage(e) {
+      var reader = new FileReader();
+      reader.onload = function (event) {
+        var imgObj = new Image();
+        imgObj.src = event.target.result;
+        imgObj.onload = function () {
+          var image = new fabric.Image(imgObj);
+          image
+            .set({
+              left: 10,
+              top: 10,
+            })
+            .scale(0.5);
+          canvas.add(image);
+        };
       };
+      reader.readAsDataURL(e.target.files[0]);
     };
-    reader.readAsDataURL(e.target.files[0]);
-  };
-}
+  }
 
   const selectAllObjects = () => {
     const elem = document.querySelector(".SelectAllObjects");
@@ -142,8 +146,7 @@ function loadFile(){
   const backGroundImage = () => {
     fabric.Image.fromURL(image1, function (img) {
       canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
-        height: 550,
-        width: 400,
+        width: 275,
       });
     });
   };
@@ -165,15 +168,13 @@ function loadFile(){
 
   const overlayImage = () => {
     canvas.setOverlayImage(image1, canvas.renderAll.bind(canvas), {
-      top: 100,
+      width: 275,
       opacity: 0.3,
     });
   };
 
   const overlayColor = () => {
     canvas.setOverlayColor("blue", canvas.renderAll.bind(canvas), {
-      height: 100,
-      width: 100,
       opacity: 0.5,
     });
   };
@@ -404,13 +405,6 @@ function loadFile(){
     canvas.add(selection);
   }
 
-  function Sepia() {
-    var filter = new fabric.Image.filters.Sepia();
-    canvas.getActiveObject().filters.push(filter);
-    canvas.getActiveObject().applyFilters();
-    canvas.renderAll();
-  }
-
   function removeBackground() {
     var filter = new fabric.Image.filters.RemoveColor({
       threshold: 3,
@@ -518,15 +512,106 @@ function loadFile(){
     canvas.clear();
   };
 
+  function rectangle() {
+    var rect1 = new fabric.Rect({
+      left: 10,
+      top: 10,
+      fill: "red",
+      lockMovementX: true,
+      lockMovementY: true,
+      width: 100,
+      height: 100,
+    });
+    canvas.add(rect1);
+
+    var rect2 = new fabric.Rect({
+      left: 150,
+      top: 10,
+      fill: "green",
+      lockMovementX: true,
+      lockMovementY: true,
+      width: 100,
+      height: 100,
+    });
+
+    canvas.add(rect2);
+
+    var rect3 = new fabric.Rect({
+      left: 10,
+      top: 150,
+      fill: "blue",
+      width: 100,
+      height: 100,
+    });
+
+    canvas.add(rect3);
+
+    var rect4 = new fabric.Rect({
+      left: 150,
+      top: 150,
+      fill: "orange",
+      width: 100,
+      height: 100,
+    });
+
+    canvas.add(rect4);
+
+    rect1.on("selected", function (event) {
+      fabric.Image.fromURL(image1, (img1) => {
+        img1.set({
+          left: rect1.left,
+          top: rect1.top,
+          width: rect1.width,
+          height: rect1.height,
+        });
+        canvas.add(img1);
+      });
+      canvas.requestRenderAll();
+    });
+    rect2.on("selected", function (event) {
+      fabric.Image.fromURL(image1, (img2) => {
+        img2.set({
+          left: rect2.left,
+          top: rect2.top,
+          width: rect2.width,
+          height: rect2.height,
+        });
+        canvas.add(img2);
+      });
+      canvas.requestRenderAll();
+    });
+    rect3.on("selected", function (event) {
+      fabric.Image.fromURL(image2, (img2) => {
+        img2.set({
+          left: rect3.left,
+          top: rect3.top,
+          width: rect3.width,
+          height: rect3.height,
+        });
+        canvas.add(img2);
+      });
+      canvas.requestRenderAll();
+    });
+    rect4.on("selected", function (event) {
+      fabric.Image.fromURL(image2, (img2) => {
+        img2.set({
+          left: rect4.left,
+          top: rect4.top,
+          width: rect4.width,
+          height: rect4.height,
+        });
+        canvas.add(img2);
+      });
+      canvas.requestRenderAll();
+    });
+  }
+
   return (
     <div className="container">
-
       <h1 className="my-4 text-center">Fabric.js Example</h1>
-      
+
       <div className="row">
-
         <div className="col-md-6 d-grid align-items-center justify-content-center my-3">
-
           <select
             class="form-select form-select-sm mb-2"
             aria-label="Default select example"
@@ -536,7 +621,6 @@ function loadFile(){
             <option onClick={() => addCircle(canvas)}>Circle</option>
             <option onClick={() => addTriangle(canvas)}>Triangle</option>
             <option onClick={() => heart(canvas)}>Heart</option>
-            {/*<option onClick={() => group(canvas)}>Group Shape</option>*/}
           </select>
           <select
             class="form-select form-select-sm mb-2"
@@ -709,25 +793,26 @@ function loadFile(){
             Download Svg file
           </button>
 
+          <button
+            className="btn btn-outline-warning btn-sm mb-2"
+            onClick={() => rectangle(canvas)}
+          >
+            4-Rectangle
+          </button>
+
           <input
-            className="mb-2"
-            id='adding'
+            className="mb-2 adding"
             type="file"
             onClick={() => loadFile(canvas)}
           />
-
         </div>
 
         <div className="col-md-6 d-flex justify-content-center my-3 wallpaper">
-
-          <div className="canvas">
-            <canvas id="canvas" />
+          <div>
+            <canvas className="canvas" id="canvas" />
           </div>
-
         </div>
-
       </div>
-
     </div>
   );
 }
